@@ -4,14 +4,44 @@
 
 class GroceryItem {
 public:
-  /*===== Constructors ===== */
-  GroceryItem(const std::string& productName) : _product_name(productName) {};
-  GroceryItem(const std::string& productName, const std::string& brandName) : _product_name(productName), _brand_name(brandName) {};
-  GroceryItem
+  /* ===== Constructors ===== */
+  GroceryItem(const std::string& pName) : productName(pName) {}
+  GroceryItem(const std::string& pName, const std::string& bName)
+             : productName(pName), brandName(bName) {}
+  GroceryItem(const std::string& pName, const std::string& bName,
+    const std::string& upc)
+             : productName(pName), brandName(bName), upc_(upc) {}
+  GroceryItem(const std::string& pName, const std::string& bName,
+    const std::string& upc, const double& price)
+             : productName(pName), brandName(bName), upc_(upc),
+               price_(price) {}
 
 private:
-  std::string _product_name = {};
-  std::string _brand_name = {};
-  std::string _UPC = {};
-  double _price = 0;
+  std::string upc_;
+  std::string brandName;
+  std::string productName;
+  double price_ = 0.0;
 };
+
+/* ===== Accessors ===== */
+std::string GroceryItem::upcCode() const{ return upc_; }
+std::string GroceryItem::brandName() const{ return brandName; }
+std::string GroceryItem::productName() const{ return productName; }
+double GroceryItem::price() const{ return price_; }
+
+/* ===== Mutators ===== */
+void GroceryItem::upcCode(const std::string& upcCode) { upc_ = upcCode; }
+void GroceryItem::brandName(const std::string& bName) { brandName = bName; }
+void GroceryItem::productName(const std::string& pName) { productName = pName; }
+void GroceryItem::price(const double& price) { price_ = price;}
+
+/* ===== Insertion/Extraction ===== */
+friend std::ostream & operator<<( std::ostream & stream,
+  const GroceryItem & groceryItem ) {
+    
+}
+
+friend std::istream & operator>>( std::istream & stream,
+  GroceryItem & groceryItem ) {
+
+}

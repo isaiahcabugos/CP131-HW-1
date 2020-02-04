@@ -36,12 +36,16 @@ void GroceryItem::productName(const std::string& pName) { productName = pName; }
 void GroceryItem::price(const double& price) { price_ = price;}
 
 /* ===== Insertion/Extraction ===== */
-friend std::ostream & operator<<( std::ostream & stream,
+friend std::ostream & GroceryItem::operator<<( std::ostream & stream,
   const GroceryItem & groceryItem ) {
-    
+    std::string concat = "\"";
+    concat += (groceryItem.upcCode() + "\" ,");
+
+    stream << concat;
+    return stream;
 }
 
-friend std::istream & operator>>( std::istream & stream,
+friend std::istream & GroceryItem::operator>>( std::istream & stream,
   GroceryItem & groceryItem ) {
 
 }

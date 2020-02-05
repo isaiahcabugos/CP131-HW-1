@@ -38,8 +38,11 @@ void GroceryItem::price(const double& price) { price_ = price;}
 /* ===== Insertion/Extraction ===== */
 friend std::ostream & GroceryItem::operator<<( std::ostream & stream,
   const GroceryItem & groceryItem ) {
-    std::string concat = "\"";
-    concat += (groceryItem.upcCode() + "\" ,");
+    std::string concat = {};
+    concat << std::quoted(groceryItem.upcCode()) + ", "
+            + std::quoted(groceryItem.brandName()) + ", "
+            + std::quoted(groceryItem.productName()) + ", "
+            + std::quoted(groceryItem.price()) << std::endl;
 
     stream << concat;
     return stream;

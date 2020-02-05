@@ -13,7 +13,7 @@ class GroceryItem
 {
   // Insertion and Extraction Operators
   friend std::ostream & operator<<( std::ostream & stream, const GroceryItem & groceryItem );
-  //friend std::istream & operator>>( std::istream & stream,       GroceryItem & groceryItem );
+  friend std::istream & operator>>( std::istream & stream,       GroceryItem & groceryItem );
 
   /*
   // Relational Operators

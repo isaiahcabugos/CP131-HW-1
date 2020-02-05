@@ -25,24 +25,30 @@ double GroceryItem::price() const{ return _price; }
 void GroceryItem::upcCode(const std::string& upcCode) { _upcCode = upcCode; }
 void GroceryItem::brandName(const std::string& bName) { _brandName = bName; }
 void GroceryItem::productName(const std::string& pName) { _productName = pName; }
-void GroceryItem::price(double price) { _price = price;}
+void GroceryItem::price(double price) { _price = price; }
 
 /* ===== Insertion/Extraction ===== */
 std::ostream & operator<<( std::ostream& stream, const GroceryItem& groceryItem ) {
-    //std::stringstream concat;
     stream << std::quoted(groceryItem.upcCode()) << ", "
            << std::quoted(groceryItem.brandName()) << ", "
            << std::quoted(groceryItem.productName()) << ", "
            << std::quoted(std::to_string(groceryItem.price())) << std::endl;
 
-
-   // stream << concat;
    return stream;
 }
 
-/*
-std::istream & GroceryItem::operator>>( std::istream & stream,
-  GroceryItem & groceryItem ) {
+std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
+       std::string attribute = {};
+       std::getline(stream, attribute, ',');
+       groceryItem.upcCode(attribute);    // Populates
 
+       std::getline(stream, attribute, ',');
+       groceryItem.brandName(attribute);
+
+       std::getline(stream, attribute, ',');
+       groceryItem.brandName(attribute);
+
+       /*std::getline(stream, attribute, ',');
+       groceryItem.price(attribute);*/
+       return stream;
 }
-*/

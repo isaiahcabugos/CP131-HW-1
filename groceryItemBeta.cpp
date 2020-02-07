@@ -2,14 +2,9 @@
 
 #include "groceryItemBeta.hpp"
 #include <sstream>
+#include <iomanip>
 
 /* ===== Constructors ===== */
-/*GroceryItem::GroceryItem(const std::string& pName) : _productName(pName) {}
-GroceryItem::GroceryItem(const std::string& pName, const std::string& bName)
-           : _productName(pName), _brandName(bName) {}
-GroceryItem::GroceryItem(const std::string& pName, const std::string& bName,
-  const std::string& upc)
-           : _productName(pName), _brandName(bName), _upc(upc) {} */
 GroceryItem::GroceryItem(const std::string& pName, const std::string& bName,
   const std::string& upc, double price)
            : _productName(pName), _brandName(bName), _upcCode(upc),
@@ -38,17 +33,27 @@ std::ostream & operator<<( std::ostream& stream, const GroceryItem& groceryItem 
 }
 
 std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
-       std::string attribute = {};
-       std::getline(stream, attribute, ',');
-       groceryItem.upcCode(attribute);    // Populates
+       std::string pricestr = {};
+       std::string trash = {};
 
-       std::getline(stream, attribute, ',');
-       groceryItem.brandName(attribute);
+       stream >> std::quoted(groceryItem._upcCode) >> trash
+              >> std::quoted(groceryItem._brandName) >> trash
+              >> std::quoted(groceryItem._productName) >> trash
+              >> std::quoted(pricestr);
 
-       std::getline(stream, attribute, ',');
-       groceryItem.brandName(attribute);
+       groceryItem._price = std::stod(pricestr);
 
-       /*std::getline(stream, attribute, ',');
-       groceryItem.price(attribute);*/
        return stream;
+}
+
+/* ===== Logic Operators ===== */
+
+bool operator== (const GroceryItem& rhs, const GroceryItem& lhs) {
+
+       int rounded = (rhs.price()*10000 - lhs.price()*10000);
+
+       return rhs.upcCode() == lhs.upcCode()
+              && rhs.brandName() == lhs.brandName()
+              && rhs.productName() == lhs.productName()
+              && rounded == 0;
 }

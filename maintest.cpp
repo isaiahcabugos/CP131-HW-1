@@ -6,6 +6,7 @@
 
 int main() {
        GroceryItem items("Supreme", "Brick", "$WAGP1N0", 21.50);
+       GroceryItem itemsTwin("Supreme", "Brick", "$WAGP1N0", 21.50001);
        GroceryItem items3("Timberland");
        GroceryItem items4("Wack", "Stack");
        GroceryItem items5("Lack", "Mac", "Back");
@@ -37,6 +38,16 @@ int main() {
        std::cout << "\n" << eq << std::endl;
           ========== */
 
+       if(items == itemsTwin) {
+              std::cout << "Equals Success!" << std::endl;
+       } else {
+              std::cout << "Not equal." << std::endl;
+       }
+
+       if(items < itemsTwin) {
+              std::cout << "items is less than itemsTwin" << std::endl;
+       } else
+              std::cout << "items not less than itemsTwin" << std::endl;
 
        return 0;
 }

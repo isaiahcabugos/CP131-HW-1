@@ -47,13 +47,37 @@ std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
 }
 
 /* ===== Logic Operators ===== */
+// Check if these are right
+bool operator== (const GroceryItem& lhs, const GroceryItem& rhs) {
+       int rounded = (lhs.price()*10000 - rhs.price()*10000);
 
-bool operator== (const GroceryItem& rhs, const GroceryItem& lhs) {
-
-       int rounded = (rhs.price()*10000 - lhs.price()*10000);
-
-       return rhs.upcCode() == lhs.upcCode()
-              && rhs.brandName() == lhs.brandName()
-              && rhs.productName() == lhs.productName()
+       return lhs.upcCode() == rhs.upcCode()
+              && lhs.brandName() == rhs.brandName()
+              && lhs.productName() == rhs.productName()
               && rounded == 0;
+}
+
+bool operator< (const GroceryItem& lhs, const GroceryItem& rhs) {
+       int rounded = (lhs.price()*10000 - rhs.price()*10000);
+
+       return lhs.upcCode() < rhs.upcCode()
+              || lhs.brandName() < rhs.brandName()
+              || lhs.productName() < rhs.productName()
+              || rounded < 0;
+}
+
+bool operator!=( const GroceryItem & lhs, const GroceryItem & rhs ){
+       return !(lhs == rhs);
+}
+
+bool operator<=( const GroceryItem & lhs, const GroceryItem & rhs ){
+       return lhs < rhs || lhs == rhs;
+}
+
+bool operator> ( const GroceryItem & lhs, const GroceryItem & rhs ){
+
+}
+
+bool operator>=( const GroceryItem & lhs, const GroceryItem & rhs ){
+
 }

@@ -75,9 +75,9 @@ bool operator<=( const GroceryItem & lhs, const GroceryItem & rhs ){
 }
 
 bool operator> ( const GroceryItem & lhs, const GroceryItem & rhs ){
-
+       return !(lhs <= rhs);
 }
 
 bool operator>=( const GroceryItem & lhs, const GroceryItem & rhs ){
-
+       return !(lhs < rhs);
 }

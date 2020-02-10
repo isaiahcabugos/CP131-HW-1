@@ -5,7 +5,7 @@
 #include <iomanip>
 
 int main() {
-       GroceryItem items("Supreme", "Brick", "$WAGP1N0", 21.50);
+       GroceryItem items("Supreme", "Brick", "$WAGP1N0", 22.50);
        GroceryItem itemsTwin("Supreme", "Brick", "$WAGP1N0", 21.50001);
        GroceryItem items3("Timberland");
        GroceryItem items4("Wack", "Stack");
@@ -38,6 +38,11 @@ int main() {
        std::cout << "\n" << eq << std::endl;
           ========== */
 
+      /* "Please", "Work", "I'd", 10.11, "Rather", "Not", "Skip", 12.457 */
+
+      std::cout << "\n=====Logic Tests=====\nItems: " << items
+                << "\nItemsTwin: " << itemsTwin << std::endl;
+
        if(items == itemsTwin) {
               std::cout << "Equals Success!" << std::endl;
        } else {
@@ -45,9 +50,20 @@ int main() {
        }
 
        if(items < itemsTwin) {
-              std::cout << "items is less than itemsTwin" << std::endl;
+              std::cout << "< Test True" << std::endl;
        } else
-              std::cout << "items not less than itemsTwin" << std::endl;
+              std::cout << "< Test False" << std::endl;
 
+       if(items > itemsTwin) std::cout << "> Test True" << std::endl;
+         else std::cout << "> Test False" << std::endl;
+
+      if(items <= itemsTwin) std::cout << "<= Test True" << std::endl;
+         else std::cout << "<= Test False" << std::endl;
+
+      if(items >= itemsTwin) std::cout << ">= Test True" << std::endl;
+         else std::cout << ">= Test False" << std::endl;
+
+      if(items != itemsTwin) std::cout << "!= Test True" << std::endl;
+         else std::cout << "!= Test False" << std::endl;
        return 0;
 }

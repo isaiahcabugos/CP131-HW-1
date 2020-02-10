@@ -1,54 +1,80 @@
 // Isaiah Cabugos CPSC131 HW 1
 
 #include "GroceryItem.hpp"
+#include <iomanip>
+#include <sstream>
 
-class GroceryItem {
-public:
-  /* ===== Constructors ===== */
-  GroceryItem(const std::string& pName) : productName(pName) {}
-  GroceryItem(const std::string& pName, const std::string& bName)
-             : productName(pName), brandName(bName) {}
-  GroceryItem(const std::string& pName, const std::string& bName,
-    const std::string& upc)
-             : productName(pName), brandName(bName), upc_(upc) {}
-  GroceryItem(const std::string& pName, const std::string& bName,
-    const std::string& upc, const double& price)
-             : productName(pName), brandName(bName), upc_(upc),
-               price_(price) {}
 
-private:
-  std::string upc_;
-  std::string brandName;
-  std::string productName;
-  double price_ = 0.0;
-};
+/* ===== Constructors ===== */
+GroceryItem::GroceryItem(const std::string& pName, const std::string& bName,
+  const std::string& upc, double price)
+           : _productName(pName), _brandName(bName), _upcCode(upc),
+             _price(price) {}
 
 /* ===== Accessors ===== */
-std::string GroceryItem::upcCode() const{ return upc_; }
-std::string GroceryItem::brandName() const{ return brandName; }
-std::string GroceryItem::productName() const{ return productName; }
-double GroceryItem::price() const{ return price_; }
+std::string GroceryItem::upcCode() const{ return _upcCode; }
+std::string GroceryItem::brandName() const{ return _brandName; }
+std::string GroceryItem::productName() const{ return _productName; }
+double GroceryItem::price() const{ return _price; }
 
 /* ===== Mutators ===== */
-void GroceryItem::upcCode(const std::string& upcCode) { upc_ = upcCode; }
-void GroceryItem::brandName(const std::string& bName) { brandName = bName; }
-void GroceryItem::productName(const std::string& pName) { productName = pName; }
-void GroceryItem::price(const double& price) { price_ = price;}
+void GroceryItem::upcCode(const std::string& upcCode) { _upcCode = upcCode; }
+void GroceryItem::brandName(const std::string& bName) { _brandName = bName; }
+void GroceryItem::productName(const std::string& pName) { _productName = pName; }
+void GroceryItem::price(double price) { _price = price; }
 
 /* ===== Insertion/Extraction ===== */
-friend std::ostream & GroceryItem::operator<<( std::ostream & stream,
-  const GroceryItem & groceryItem ) {
-    std::string concat = {};
-    concat << std::quoted(groceryItem.upcCode()) + ", "
-            + std::quoted(groceryItem.brandName()) + ", "
-            + std::quoted(groceryItem.productName()) + ", "
-            + std::quoted(groceryItem.price()) << std::endl;
+std::ostream & operator<<( std::ostream& stream, const GroceryItem& groceryItem ) {
+    stream << std::quoted(groceryItem.upcCode()) << ", "
+           << std::quoted(groceryItem.brandName()) << ", "
+           << std::quoted(groceryItem.productName()) << ", "
+           << std::to_string(groceryItem.price()) << std::endl;
 
-    stream << concat;
-    return stream;
+   return stream;
 }
 
-friend std::istream & GroceryItem::operator>>( std::istream & stream,
-  GroceryItem & groceryItem ) {
+std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
+       std::string comma = {};
 
+       stream >> std::quoted(groceryItem._upcCode) >> comma
+              >> std::quoted(groceryItem._brandName) >> comma
+              >> std::quoted(groceryItem._productName) >> comma
+              >> groceryItem._price;
+
+       return stream;
+}
+
+/* ===== Logic Operators ===== */
+bool operator== (const GroceryItem& lhs, const GroceryItem& rhs) {
+       int rounded = (lhs.price()*10000 - rhs.price()*10000);
+
+       return lhs.upcCode() == rhs.upcCode()
+              && lhs.brandName() == rhs.brandName()
+              && lhs.productName() == rhs.productName()
+              && rounded == 0;
+}
+
+bool operator< (const GroceryItem& lhs, const GroceryItem& rhs) {
+       int rounded = (lhs.price()*10000 - rhs.price()*10000);
+
+       return lhs.upcCode() < rhs.upcCode()
+              || lhs.brandName() < rhs.brandName()
+              || lhs.productName() < rhs.productName()
+              || rounded < 0;
+}
+
+bool operator!=( const GroceryItem & lhs, const GroceryItem & rhs ){
+       return !(lhs == rhs);
+}
+
+bool operator<=( const GroceryItem & lhs, const GroceryItem & rhs ){
+       return lhs < rhs || lhs == rhs;
+}
+
+bool operator> ( const GroceryItem & lhs, const GroceryItem & rhs ){
+       return !(lhs <= rhs);
+}
+
+bool operator>=( const GroceryItem & lhs, const GroceryItem & rhs ){
+       return !(lhs < rhs);
 }

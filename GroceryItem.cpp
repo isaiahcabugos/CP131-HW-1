@@ -1,14 +1,17 @@
 // Isaiah Cabugos CPSC131 HW 1
 
 #include "GroceryItem.hpp"
+#include <cstdlib>
 #include <iomanip>
 #include <sstream>
 
 
+const double EPSILON = 0.0001;
+
 /* ===== Constructors ===== */
-GroceryItem::GroceryItem(const std::string& pName, const std::string& bName,
-  const std::string& upc, double price)
-           : _productName(pName), _brandName(bName), _upcCode(upc),
+GroceryItem::GroceryItem(const std::string& productName, const std::string& brandName,
+  const std::string& upcCode, double price)
+           : _productName(productName), _brandName(brandName), _upcCode(upcCode),
              _price(price) {}
 
 /* ===== Accessors ===== */
@@ -46,21 +49,19 @@ std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
 
 /* ===== Logic Operators ===== */
 bool operator== (const GroceryItem& lhs, const GroceryItem& rhs) {
-       int rounded = (lhs.price()*10000 - rhs.price()*10000);
 
        return lhs.upcCode() == rhs.upcCode()
               && lhs.brandName() == rhs.brandName()
               && lhs.productName() == rhs.productName()
-              && rounded == 0;
+              && std::abs(lhs.price() - rhs.price()) < EPSILON;
 }
 
 bool operator< (const GroceryItem& lhs, const GroceryItem& rhs) {
-       int rounded = (lhs.price()*10000 - rhs.price()*10000);
 
        return lhs.upcCode() < rhs.upcCode()
               || lhs.brandName() < rhs.brandName()
               || lhs.productName() < rhs.productName()
-              || rounded < 0;
+              || lhs.price() < rhs.price();
 }
 
 bool operator!=( const GroceryItem & lhs, const GroceryItem & rhs ){
@@ -68,11 +69,11 @@ bool operator!=( const GroceryItem & lhs, const GroceryItem & rhs ){
 }
 
 bool operator<=( const GroceryItem & lhs, const GroceryItem & rhs ){
-       return lhs < rhs || lhs == rhs;
+       return !(lhs > rhs);
 }
 
 bool operator> ( const GroceryItem & lhs, const GroceryItem & rhs ){
-       return !(lhs <= rhs);
+       return rhs < lhs;
 }
 
 bool operator>=( const GroceryItem & lhs, const GroceryItem & rhs ){

@@ -5,77 +5,81 @@
 #include <iomanip>
 #include <sstream>
 
-
 const double EPSILON = 0.0001;
 
 /* ===== Constructors ===== */
-GroceryItem::GroceryItem(const std::string& productName, const std::string& brandName,
-  const std::string& upcCode, double price)
-           : _productName(productName), _brandName(brandName), _upcCode(upcCode),
-             _price(price) {}
+GroceryItem::GroceryItem(const std::string& productName, 
+                         const std::string& brandName,
+                         const std::string& upcCode, 
+                         double             price)
+  : _upcCode(upcCode), 
+    _brandName(brandName), 
+    _productName(productName), 
+    _price(price) 
+{}
 
 /* ===== Accessors ===== */
-std::string GroceryItem::upcCode() const{ return _upcCode; }
-std::string GroceryItem::brandName() const{ return _brandName; }
+std::string GroceryItem::upcCode() const    { return _upcCode; }
+std::string GroceryItem::brandName() const  { return _brandName; }
 std::string GroceryItem::productName() const{ return _productName; }
-double GroceryItem::price() const{ return _price; }
+double GroceryItem::price() const           { return _price; }
 
 /* ===== Mutators ===== */
-void GroceryItem::upcCode(const std::string& upcCode) { _upcCode = upcCode; }
-void GroceryItem::brandName(const std::string& bName) { _brandName = bName; }
+void GroceryItem::upcCode(const std::string& upcCode)   { _upcCode = upcCode; }
+void GroceryItem::brandName(const std::string& bName)   { _brandName = bName; }
 void GroceryItem::productName(const std::string& pName) { _productName = pName; }
-void GroceryItem::price(double price) { _price = price; }
+void GroceryItem::price(double price)                   { _price = price; }
 
 /* ===== Insertion/Extraction ===== */
 std::ostream & operator<<( std::ostream& stream, const GroceryItem& groceryItem ) {
-    stream << std::quoted(groceryItem.upcCode()) << ", "
-           << std::quoted(groceryItem.brandName()) << ", "
+    stream << std::quoted(groceryItem.upcCode())     << ", "
+           << std::quoted(groceryItem.brandName())   << ", "
            << std::quoted(groceryItem.productName()) << ", "
-           << std::to_string(groceryItem.price()) << std::endl;
+           <<             groceryItem.price()        << std::endl;
 
    return stream;
 }
 
 std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
-       std::string comma = {};
+  try { // Attempts to write stream into a GroceryItem, if it fails, an exception is thrown.
+       GroceryItem validItem;
+       char comma = {};
 
-       stream >> std::quoted(groceryItem._upcCode) >> comma
-              >> std::quoted(groceryItem._brandName) >> comma
-              >> std::quoted(groceryItem._productName) >> comma
-              >> groceryItem._price;
+       stream >> std::quoted(validItem._upcCode)     >> comma
+              >> std::quoted(validItem._brandName)   >> comma
+              >> std::quoted(validItem._productName) >> comma
+              >>             validItem._price;
+    
+      groceryItem = std::move(validItem);
+  }
+  
+  catch (const std::ios::failure &) {
+    if( !stream.eof() ) throw;
+  }
 
-       return stream;
+  return stream;
 }
 
 /* ===== Logic Operators ===== */
 bool operator== (const GroceryItem& lhs, const GroceryItem& rhs) {
 
-       return lhs.upcCode() == rhs.upcCode()
-              && lhs.brandName() == rhs.brandName()
+       return    lhs.upcCode()     == rhs.upcCode()
+              && lhs.brandName()   == rhs.brandName()
               && lhs.productName() == rhs.productName()
               && std::abs(lhs.price() - rhs.price()) < EPSILON;
 }
 
 bool operator< (const GroceryItem& lhs, const GroceryItem& rhs) {
 
-       return lhs.upcCode() < rhs.upcCode()
-              || lhs.brandName() < rhs.brandName()
-              || lhs.productName() < rhs.productName()
-              || lhs.price() < rhs.price();
+  if (auto result = lhs.upcCode()     .compare(rhs.upcCode()     ); result != 0)  return result < 0;
+  if (auto result = lhs.brandName()   .compare(rhs.brandName()   ); result != 0)  return result < 0;
+  if (auto result = lhs.productName() .compare(rhs.productName() ); result != 0)  return result < 0;
+  if (std::abs(lhs.price() - rhs.price() >= EPSILON)                              return lhs.price() < rhs.price();
+  
+  return false;
 }
 
-bool operator!=( const GroceryItem & lhs, const GroceryItem & rhs ){
-       return !(lhs == rhs);
-}
-
-bool operator<=( const GroceryItem & lhs, const GroceryItem & rhs ){
-       return !(lhs > rhs);
-}
-
-bool operator> ( const GroceryItem & lhs, const GroceryItem & rhs ){
-       return rhs < lhs;
-}
-
-bool operator>=( const GroceryItem & lhs, const GroceryItem & rhs ){
-       return !(lhs < rhs);
-}
+bool operator!=( const GroceryItem & lhs, const GroceryItem & rhs ) { return !(lhs == rhs); }
+bool operator<=( const GroceryItem & lhs, const GroceryItem & rhs ) { return !(rhs <  lhs); }
+bool operator> ( const GroceryItem & lhs, const GroceryItem & rhs ) { return  (rhs <  lhs); }
+bool operator>=( const GroceryItem & lhs, const GroceryItem & rhs ) { return !(lhs <  rhs); }

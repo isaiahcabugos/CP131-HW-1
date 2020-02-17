@@ -8,14 +8,14 @@
 const double EPSILON = 0.0001;
 
 /* ===== Constructors ===== */
-GroceryItem::GroceryItem(const std::string& productName, 
+GroceryItem::GroceryItem(const std::string& productName,
                          const std::string& brandName,
-                         const std::string& upcCode, 
+                         const std::string& upcCode,
                          double             price)
-  : _upcCode(upcCode), 
-    _brandName(brandName), 
-    _productName(productName), 
-    _price(price) 
+  : _upcCode(upcCode),
+    _brandName(brandName),
+    _productName(productName),
+    _price(price)
 {}
 
 /* ===== Accessors ===== */
@@ -49,10 +49,10 @@ std::istream& operator>>( std::istream& stream, GroceryItem& groceryItem ) {
               >> std::quoted(validItem._brandName)   >> comma
               >> std::quoted(validItem._productName) >> comma
               >>             validItem._price;
-    
+
       groceryItem = std::move(validItem);
   }
-  
+
   catch (const std::ios::failure &) {
     if( !stream.eof() ) throw;
   }
@@ -74,8 +74,8 @@ bool operator< (const GroceryItem& lhs, const GroceryItem& rhs) {
   if (auto result = lhs.upcCode()     .compare(rhs.upcCode()     ); result != 0)  return result < 0;
   if (auto result = lhs.brandName()   .compare(rhs.brandName()   ); result != 0)  return result < 0;
   if (auto result = lhs.productName() .compare(rhs.productName() ); result != 0)  return result < 0;
-  if (std::abs(lhs.price() - rhs.price() >= EPSILON)                              return lhs.price() < rhs.price();
-  
+  if (std::abs(lhs.price() - rhs.price()) >= EPSILON)                              return lhs.price() < rhs.price();
+
   return false;
 }
 
